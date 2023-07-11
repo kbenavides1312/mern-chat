@@ -1,5 +1,9 @@
-import Register from Register(){
+import Register from "./Register";
+
+function App() {
   return (
-<div> className="bg-blu-50 h-screen here</div>
+    <Register/>
   )
 }
+
+export default App
