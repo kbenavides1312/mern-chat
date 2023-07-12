@@ -1,13 +1,16 @@
-import { useState } from "react";
-import axios from "axios"
+import {useContext, useState} from "react";
+import axios from "axios";
+import { UserContext } from "./UserContext.jsx";
 
 export default function Register() {
     const[username, setUsername] = useState('');
-    const [password, setpasswor] =useState('');
-
-    function register(ev) {
+    const [password, setPassword] =useState('');
+    const {setUsername:setLoggedInUsername, setId}  = useContext(UserContext);
+    async function register(ev) {
         ev.preventDefault();
-        axios.post('/register', {username, password})
+      const {data} = await axios.post('/register', {username, password});
+      setLoggedInUsername (username);
+      setId(data.id);
     }
 
     return(
@@ -18,7 +21,7 @@ export default function Register() {
                   type="text" placeholder="username"
                   className="block w-full rounded-sm p-2 mb-2 border"/>
                 <input value={password}
-                 onChange={ev => setpasswor(ev.target.value)} type="password"
+                 onChange={ev => setPassword(ev.target.value)} type="password"
                   placeholder="password"
                     className="block w-full rounded-sm p-2 mb-2 border"/>
                 <button className="bg-blue-500 tex-white block w-full rounded-sm p-2">Register</button>
