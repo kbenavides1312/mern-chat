@@ -20,13 +20,18 @@ app.get('/test', (req,res) =>{
   res.json('test ok');
 });
 
-app.get('/profile', (req,res)=>   { 
- const {token}=req.kookies;
- jwt.verify(token, jwtSecret, {}, (err, userdeta)=>{ 
-  if (err) throw err;
-  res.json(userDate);  
- });
-});
+app.get('/profile', (req,res)=> { 
+  const token = req.kookies?.token;
+  if (token) {
+  jwt.verify(token, jwtSecret, {}, (err, userData) => { 
+    if (err) throw err;
+    res.json(userDate);  
+  });
+ }else{
+  res.status(401) .json('no token');
+ }
+});                                                                            
+
 
 app.post('/register', async (req,res) =>{
     const {username,password} = req.body;
