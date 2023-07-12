@@ -12,7 +12,6 @@ export default function Register() {
       setLoggedInUsername (username);
       setId(data.id);
     }
-
     return(
         <div className="bg-blue-50 h-screen flex items-center">
             <form className="w-64 mx-auto m-12" onSubmit={register}> 
