@@ -6,16 +6,20 @@ const cors = require('cors')
 const User = require('./models/User')
 
 dotenv.config(); 
-Mongoose.connect(process.env.MONGO_URL);
+Mongoose.connect(process.env.MONGO_URL, (err)=> {;
+if (err) throw err;
+});
 const jwtSecret = process.env.JWT_SECRET;
 
-const app = express()
+const app = express() 
 
-app.use(express.json())
+app.use(express.json());
+app.use()
 app.use (cors({ 
  credentials:true,
  origin: process.env.CLIENT_URL,
 }));
+
 app.get('/test', (req,res) =>{
   res.json('test ok');
 });

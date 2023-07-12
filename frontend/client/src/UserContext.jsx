@@ -1,5 +1,5 @@
-import axios from "axios";
 import {createContext, useEffect, useState } from "react";
+import axios from "axios";
 
 export const UserContext = createContext({});
 
@@ -16,4 +16,4 @@ export function UserContextProvider({children}){
             {children}
         </UserContext.Provider>
     );
-} 
+}   
