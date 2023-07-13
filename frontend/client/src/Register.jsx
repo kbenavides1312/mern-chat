@@ -5,7 +5,7 @@ import { UserContext } from "./UserContext.jsx";
 export default function Register() {
     const[username, setUsername] = useState('');
     const [password, setPassword] =useState('');
-    const [isLoginOrRegister, setLoginOrRegister] =useState('register');
+    const [isLoginOrRegister, setIsLoginOrRegister] = useState('register');
     const {setUsername:setLoggedInUsername, setId}  = useContext(UserContext);
     async function register(ev) {
         ev.preventDefault();
@@ -25,12 +25,27 @@ export default function Register() {
                   type="password"
                   placeholder="password"
                   className="block w-full rounded-sm p-2 mb-2 border"/>
-                <button className="bg-blue-500 tex-white block w-full rounded-sm p-2">Register</button>
+                <button className="bg-blue-500 tex-white block w-full rounded-sm p-2">
+                  {isLoginOrRegister === 'register' ? 'Register' : 'Login'}
+                </button>
                 <div className="text-center mt-2">
-                  Already a member? 
-                  <button>oNclick={() => setLoginOrRegister('Login')}> 
-                    Login here 
-                  </button >
+                   {isLoginOrRegister === 'register' && (
+                    <div>
+                      Already a member? 
+                        <button onClick={() => setIsLoginOrRegister('login')}> 
+                           Login here 
+                        </button >
+                    </div>
+                  )} 
+                    {isLoginOrRegister === 'login' && (
+                    <div>
+                      Don't have an account? 
+                        <button onClick={() => setIsLoginOrRegister('register')}> 
+                          Register 
+                        </button >
+                    </div>
+                  )} 
+
                 </div>
             </form>
         </div>
