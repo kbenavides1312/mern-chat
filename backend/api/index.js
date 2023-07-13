@@ -36,8 +36,11 @@ app.get('/profile', (req,res)=> {
  }else{
   res.status(401) .json('no token');
  }
-});                                                                            
+});  
 
+app.post('login', (req,res) => {
+const{username, password} =req.body; 
+});
 
 app.post('/register', async (req,res) =>{
     const {username,password} = req.body;
