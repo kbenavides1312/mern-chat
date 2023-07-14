@@ -103,5 +103,6 @@ wss.on('connection', (connection, req) => {
    client.sent(JSON.stringify({
      online: [...wss.clients].map(c => ({userId:c.userId,username:c.username}))
   }));
+  });
   console.log([...wss.clients].map(c => c.username));
 });
