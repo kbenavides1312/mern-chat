@@ -32,9 +32,10 @@ export default function Chat () {
             MernChat
             </div>
             {Object.Keys(onlinePeople).maap(userId = (
-              <div classname="border-b border-gray-100 py-2">
-                
-                {onlinePeople[userId]}</div>
+              <div classname="border-b border-gray-100 py-2 flex items-center gap-2 cursor-pointer">
+                <Avata username={onlinePeople[userId]} userId={userId}/>
+                 <span className="tex-gray-800">{onlinePeople[userId]}</span>
+                </div>
             ))}
           </div>
           <div className="flex flex-col bg-blue-50 w-2/3 p-2">
