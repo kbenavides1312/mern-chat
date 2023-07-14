@@ -29,11 +29,11 @@ app.get('/test', (req,res) =>{
 });
 
 app.get('/profile', (req,res)=> { 
-  const token = req.kookies?.token;
+  const token = req.cookies?.token;
   if (token) {
   jwt.verify(token, jwtSecret, {}, (err, userData) => { 
     if (err) throw err;
-    res.json(userDate);  
+    res.json(userData);  
   });
  }else{
   res.status(401) .json('no token');
@@ -85,8 +85,10 @@ const server = app.listen(4040);
 const wss = new ws.WebSocketServer({server});
 wss.on('connection', (connection, req) => {
   const cookies = req.headers.cookie;
+  console.log(req.headers)
   if (cookies){
-    const tokenCookieString = cookies.split(';').fint(str => str.startsWith('token=')); 
+    const tokenCookieString = cookies.split(';').find(str => str.startsWith('token=')); 
+    console.log(tokenCookieString)
     if (tokenCookieString){
       const token = tokenCookieString.split('=')[1];  
       if (token) {
