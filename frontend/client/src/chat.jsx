@@ -48,15 +48,15 @@ export default function Chat () {
   }
   function sendMessage(ev) {
    ev.preventDefault();
-   console.long('sending');
    ws.send(JSON.stringify(  {
      recipient: selectedUserId,
-     text: newMessageTex,
+     text: newMessageText,
 
    }));
    setNewMessagetext('');
+   console.log('message sent');
    setMessages(prev => ([...prev,{
-    text: newMessageTex,
+    text: newMessageText,
     sender: id,
     recipient: selectedUserId,
     _id: Date.now(),
@@ -75,7 +75,7 @@ export default function Chat () {
     if (selectedUserId) {
       console.log("selectedUserId", selectedUserId)
     axios.get('/messages/'+selectedUserId).then(res => {
-    setMessages(res,data);
+    setMessages(res.data);
     });
   }
 }, [selectedUserId]);
