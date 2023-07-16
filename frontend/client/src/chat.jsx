@@ -41,7 +41,8 @@ export default function Chat () {
     console.log({ev,messageData});
     if ('online' in messageData){
       showOnlinePeople(messageData.online);
-    } else if ('tex' in messageData){
+    } else if ('text' in messageData){
+      console.log("text")
       setMessages(prev => ([...prev, {...messageData}]));
     }
   }
@@ -65,12 +66,14 @@ export default function Chat () {
   useEffect(() => {
    const div = divUnderMessages.current;
    if(div) {
+    console.log("div", div)
      div.scrollIntoView({behavior:'smooth', block:'end'})
    }
   }, [messages]);
 
-    useEffect(() => {
+  useEffect(() => {
     if (selectedUserId) {
+      console.log("selectedUserId", selectedUserId)
     axios.get('/messages/'+selectedUserId).then(res => {
     setMessages(res,data);
     });
@@ -117,14 +120,14 @@ const messagesWithouDupes = uniqBy(messages, '_id');
                  </div>
                </div>
               ))}
-             <div >ref={divUnderMessages}</div>
+             <div ref={divUnderMessages}></div>
             </div>
            </div>
           </div>
            )}
             </div>
             {!!selectedUserId && (
-              < form className="flex gap-2" onSumit={sendMessage}>
+              < form className="flex gap-2" onSubmit={sendMessage}>
                 <input type="text"
                     value={newMessageTex}
                     onChange={ev => setNewMessagetext(ev.target.value)}
