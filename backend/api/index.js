@@ -125,7 +125,7 @@ wss.on('connection', (connection, req) => {
 connection.isAlive = true;
 
 connection.timer =setInterval(() => {
- connection.ping();
+connection.ping();
  connection.deathTimer = setTimeout(() => {
   connection.isAlive = false;
   clearnInterval(connection.timer);
@@ -155,7 +155,7 @@ connection.on('pong', () => {
       }
     }
   }
-connection.on('message', async (message) => {
+  connection.on('message', async (message) => {
   const messageData = JSON.parse(message.toString());
   const {recipient, text}= messageData;
   if (recipient && text) {
