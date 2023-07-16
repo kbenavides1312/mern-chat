@@ -3,10 +3,10 @@ const Mongoose = require('mongoose');
 const cookieparser = require('cookie-parser');
 const dotenv = require('dotenv');
 const jwt = require ('jsonwebtoken');
-const cors = require('cors')
-const bcrypt = require('bcryptjs')
-const User = require('./models/User')
-const message = require('./models/message');
+const cors = require('cors');
+const bcrypt = require('bcryptjs');
+const User = require('./models/User');
+const Message = require('./models/Message');
 const ws = require('ws');
 
 dotenv.config();
