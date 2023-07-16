@@ -123,7 +123,7 @@ connection.isAlive = true;
 
 connection.timer =setInterval(() => {
  connection.ping();
- connection.deathTimer = senTimeout(() => {
+ connection.deathTimer = sentTimeout(() => {
   connection.isAlive = false;
   clearnInterval(connection.timer);
   connection.terminate();
