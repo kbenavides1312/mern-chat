@@ -14,7 +14,7 @@ Mongoose.connect(process.env.MONGO_URL)
 .then(() => console.log('Connected Successfully'))
 .catch((err) => { console.error(err);
  });
- 
+
 const jwtSecret = process.env.JWT_SECRET;
 const bcryptSalt = bcrypt.genSaltSync(10)
 const app = express()
@@ -82,6 +82,9 @@ app.post('/login', async (req,res) => {
   }
 });
 
+app.post('/logout', (req,res) => {
+res.cookie('token', '', {sameSite:'none', secure:true}).json('ok');
+});
 
 app.post('/register', async (req,res) =>{
     const {username,password} = req.body;
