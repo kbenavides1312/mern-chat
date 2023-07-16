@@ -1,5 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Avatar from "./Avatar";
+import axios from "axios";
 
 export default function Chat () {
   const [ws, setWs] = useState(null);
@@ -8,11 +9,23 @@ export default function Chat () {
   const [newMessageTex,setNewMessagetext] = useState ('')
   const [messages,setMessages] = useState([]);
   const {username,id} = useContext(useContext);
+  const divUnderMessages = useRef();
   useEffect( () => {
     const ws = new WebSocket('ws://localhost:4040');
     setWs(ws);
-    ws.addEventListener('message', handleMessage)
+     connecToWs();
   }, []);
+  function connecToWs() {
+     const ws = new WebSocket('ws://localhost:4040');
+    setWs(ws);
+    ws.addEventListener('message', handleMessage);
+    ws.addEventListener('clone', () => {
+    setTimeout(() => {
+      console.log('Disconnetec. Tryin to reconnect.')
+      connecToWs();
+     }, 1000);
+   });
+  }
   function showOnlinePeople(peopleArray) {
   const people = {};
   peopleArray.forEach(({userId,username}) => {
@@ -32,19 +45,39 @@ export default function Chat () {
   function sendMessage(ev) {
    ev.preventDefault();
    console.long('sending');
-   ws.send(JSON.stringify({
+   ws.send(JSON.stringify(  {
      recipient: selectedUserId,
      text: newMessageTex,
 
    }));
    setNewMessagetext('');
-   setMessages(prev => ([...prev,{text: newMessageTex, isOur:true}]));
+   setMessages(prev => ([...prev,{
+    text: newMessageTex,
+    sender: id,
+    recipient: selectedUserId,
+    _id: Date.now(),
+  }]));
   }
+
+  useEffect(() => {
+   const div = divUnderMessages.current;
+   if(div) {
+     div.scrollIntoView({behavior:'smooth', block:'end'})
+   }
+  }, [messages]);
+
+    useEffect(() => {
+    if (selectedUserId) {
+    axios.get('/messages/'+selectedUserId).then(res => {
+    setMessages(res,data);
+    });
+  }
+}, [selectedUserId]);
 
 const onlinePeopleExclOurUser ={...onlinePeople}
 delete onlinePeopleExclOurUser[id];
 
-const messagesWithouDupes = uniqBy(messages, 'id');
+const messagesWithouDupes = uniqBy(messages, '_id');
 
   return(
     <div className="flex h-screen">
@@ -57,7 +90,7 @@ const messagesWithouDupes = uniqBy(messages, 'id');
               <div className="w-1 bg-blue-500 h-12 rounded-r-md"></div>
             )}
             <div className="flex gap-2 py-2 pl-4 items-center">
-              <Avatar username={onlinePeople[userId]} userId={userId}/>
+              <Avatar online={true} username={onlinePeople[userId]} userId={userId}/>
               <span className="tex-gray-800">{onlinePeople[userId]}</span>
             </div>
           </div>
@@ -71,11 +104,20 @@ const messagesWithouDupes = uniqBy(messages, 'id');
               </div>
            )}
            {!!selectedUserId && (
-              <div>
-               {messagesWithouDupes.map(message => (
-                <div>{message.text}</div>
-               ))}
-             </div>
+              <div className="mb-4 h-fill">
+               <div className="relative h-full">
+                 <div  className="overflow-y-scroll absolute top-0 left-0 right-0 bottom-2">
+                   {messagesWithouDupes.map(message => (
+                    <div key={message._id} className="{(message.sender === id ? 'tex-right': 'tex-left')}">
+                     <div className={"text-lef inline-bock p-2 my-2 rounded-md tex-sm " +(message.sender === id ?'bg-lue-500 tex-white':'bg-white tex-gray-500')}>
+                   {message.text}
+                 </div>
+               </div>
+              ))}
+             <div >ref={divUnderMessages}</div>
+            </div>
+           </div>
+          </div>
            )}
             </div>
             {!!selectedUserId && (
