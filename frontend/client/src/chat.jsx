@@ -37,12 +37,12 @@ export default function Chat () {
  setOnlinePeople(people);
   }
   function handleMessage(ev){
-    const messageDate =JSON.parse(ev.data);
-    console.long({ev,messageDate});
-    if ('online' in messageDate){
-      showOnlinePeople(messageDate.online);
-    } else if ('tex' in messageDate){
-      setMessages(prev => ([...prev, {...messageDate}]));
+    const messageData =JSON.parse(ev.data);
+    console.log({ev,messageData});
+    if ('online' in messageData){
+      showOnlinePeople(messageData.online);
+    } else if ('tex' in messageData){
+      setMessages(prev => ([...prev, {...messageData}]));
     }
   }
   function sendMessage(ev) {

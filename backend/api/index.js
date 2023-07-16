@@ -126,7 +126,7 @@ wss.on('connection', (connection, req) => {
       }
     }
   }
-Connection.on('message', async (message) => {
+connection.on('message', async (message) => {
   const messageData = JSON.parse(menssage.toString());
   const {recipient, text}= messageData;
   if (recipient && text) {
