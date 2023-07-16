@@ -14,6 +14,7 @@ Mongoose.connect(process.env.MONGO_URL)
 .then(() => console.log('Connected Successfully'))
 .catch((err) => { console.error(err);
  });
+ 
 const jwtSecret = process.env.JWT_SECRET;
 const bcryptSalt = bcrypt.genSaltSync(10)
 const app = express()
@@ -81,6 +82,7 @@ app.post('/login', async (req,res) => {
   }
 });
 
+
 app.post('/register', async (req,res) =>{
     const {username,password} = req.body;
     try {
@@ -101,15 +103,38 @@ app.post('/register', async (req,res) =>{
       if (err) throw err;
       res.status(500).json('error')
     }
-
-
-    });
+});
 
 
 const server = app.listen(4040);
 
 const wss = new ws.WebSocketServer({server});
 wss.on('connection', (connection, req) => {
+
+  function notifyAboutOnlinePeople() {
+    [...wss.clients].forEach(client =>{
+      client.send(JSON.stringify({
+        online: [...wss.clients].map(c => ({userId:c.userId,username:c.username}))
+      }));
+    });
+  }
+
+connection.isAlive = true;
+
+connection.timer =setInterval(() => {
+ connection.ping();
+ connection.deathTimer = senTimeout(() => {
+  connection.isAlive = false;
+  clearnInterval(connection.timer);
+  connection.terminate();
+  notifyAboutOnlinePeople();
+  console.log('dead');
+  }, 1000);
+}, 5000);
+
+connection.on('pong', () => {
+  clearTimeout( connection.deathTimer);
+});
 
   //read username and id from the cookie for this conenection
   const cookies = req.headers.cookie;
@@ -148,10 +173,5 @@ connection.on('message', async (message) => {
 });
 
   // notify everyone abaut online people (when someone connects)
-  [...wss.clients].forEach(client =>{
-   client.send(JSON.stringify({
-     online: [...wss.clients].map(c => ({userId:c.userId,username:c.username}))
-  }));
-  });
-  console.log([...wss.clients].map(c => c.username));
+  notifyAboutOnlinePeople();
 });
