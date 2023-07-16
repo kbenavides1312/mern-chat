@@ -26,7 +26,7 @@ export default function RegisterAndLogin() {
                   type="password"
                   placeholder="password"
                   className="block w-full rounded-sm p-2 mb-2 border"/>
-                <button className="bg-blue-500 tex-white block w-full rounded-sm p-2">
+                <button className="bg-blue-500 text-white block w-full rounded-sm p-2">
                   {isLoginOrRegister === 'register' ? 'Register' : 'Login'}
                 </button>
                 <div className="text-center mt-2">

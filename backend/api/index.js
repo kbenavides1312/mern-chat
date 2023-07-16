@@ -131,7 +131,7 @@ connection.on('message', async (message) => {
   const messageData = JSON.parse(message.toString());
   const {recipient, text}= messageData;
   if (recipient && text) {
-    const message = await message.create({
+    const messageDoc = await Message.create({
       sender:connection.userId,
       recipient,
       text,
