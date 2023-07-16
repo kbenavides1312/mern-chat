@@ -58,7 +58,7 @@ app.get('/profile', (req,res)=> {
   if (token) {
   jwt.verify(token, jwtSecret, {}, (err, userData) => {
     if (err) throw err;
-    resolve(userDta);
+    res.json(userData);
   });
  }else{
   res.status(401) .json('no token');

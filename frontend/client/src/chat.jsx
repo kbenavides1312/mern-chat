@@ -1,5 +1,8 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import Avatar from "./Avatar";
+import Logo from "./Logo";
+import {UserContext} from "./UserContext.jsx";
+import {uniqBy} from "lodash";
 import axios from "axios";
 
 export default function Chat () {
@@ -8,7 +11,7 @@ export default function Chat () {
   const [selectedUserId,setSelectedUserId] = useState (null);
   const [newMessageTex,setNewMessagetext] = useState ('')
   const [messages,setMessages] = useState([]);
-  const {username,id} = useContext(useContext);
+  const {username,id} = useContext(UserContext);
   const divUnderMessages = useRef();
   useEffect( () => {
     const ws = new WebSocket('ws://localhost:4040');
@@ -82,7 +85,7 @@ const messagesWithouDupes = uniqBy(messages, '_id');
   return(
     <div className="flex h-screen">
       <div className="bg-white w-1/3">
-        <logo />
+        <Logo />
         {Object.keys(onlinePeople).map(userId => (
           <div key={userId}onClick={() => setSelectedUserId(userId)}
           className={"border-b border-gray-100  flex items-center gap-2 cursor-pointer"+(userId === selectedUserId ? 'bg-blue-50' : '')}>
