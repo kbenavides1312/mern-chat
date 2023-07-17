@@ -55,6 +55,11 @@ app.get('/messages/:userId', async (req,res) => {
  res.json(messages);
 });
 
+app.get('/people', async (req,res) => {
+ const user = await User.find({}, {'_id':1,username:1});
+ res.json(user);
+});
+
 app.get('/profile', (req,res)=> {
   const token = req.cookies?.token;
   if (token) {
@@ -128,7 +133,7 @@ connection.timer =setInterval(() => {
 connection.ping();
  connection.deathTimer = setTimeout(() => {
   connection.isAlive = false;
-  clearnInterval(connection.timer);
+  clearInterval(connection.timer);
   connection.terminate();
   notifyAboutOnlinePeople();
   console.log('dead');
